@@ -1,0 +1,43 @@
+version: '3.1'
+
+services:
+
+  mysql:
+    container_name: mysql
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  zabbix:
+    container_name: zabbix
+    depends_on:
+      - mysql
+    image: zabbix/zabbix-server-mysql:ubuntu-latest
+    environment: 
+       DB_SERVER_HOST: "mysql"
+       MYSQL_USER: "root"
+       MYSQL_PASSWORD: "example"
+    ports:
+      - 10051:10051
+
+  zabbix-web:
+    container_name: zabbix-web
+    depends_on:
+      - mysql
+      - zabbix
+    image: zabbix/zabbix-web-nginx-mysql:ubuntu-latest
+    environment: 
+       DB_SERVER_HOST: "mysql"
+       MYSQL_USER: "root"
+       MYSQL_PASSWORD: "example"
+       ZBX_SERVER_HOST: "zabbix"
+       PHP_TZ: "Asia/Seoul"
+    ports:
+      - 80:80
