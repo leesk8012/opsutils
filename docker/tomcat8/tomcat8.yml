@@ -1,0 +1,28 @@
+# docker run -d --name elasticsearch --net somenetwork -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" elasticsearch:6.4.2
+# docker-compose -f [filename] up -d
+# https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html
+---
+version: '3.1'
+
+# tomcat:8.5.54-jdk8-openjdk or tomcat:8.5.54-jdk8-openjdk-slim
+services:
+  tomcat:
+    container_name: tomcat8_new
+    image: tomcat8_new:1.1
+    environment:
+       - JAVA_OPTS="-Djava.awt.headless=true -server -Xms2144m -Xmx2144m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+       - 8080:8080
+    networks:
+       - esnet
+    #volumes:
+       #- /data/tomcat8/webapps:/usr/local/tomcat/webapps
+       #- /data/tomcat8/logs:/usr/local/tomcat/logs
+ 
+networks:
+  esnet:
+
