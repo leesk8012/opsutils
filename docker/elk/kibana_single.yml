@@ -1,0 +1,25 @@
+# docker run -d --name kibana --net somenetwork -p 5601:5601 kibana:tag
+#
+
+#version: '2'
+#services:
+#  kibana:
+#    image: docker.elastic.co/kibana/kibana:6.6.1
+#    volumes:
+#      - ./kibana.yml:/usr/share/kibana/config/kibana.yml
+
+version: '2'
+services:
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:7.11.1
+    environment:
+      SERVER_NAME: kibana.example.org
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    ports:
+       - 5601:5601
+    networks:
+       - esnet
+
+networks:
+  esnet:
